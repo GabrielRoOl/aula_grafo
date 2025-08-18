@@ -1,81 +1,116 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class Main
-{
+public class Main {
+
     public static void main(String[] args) {
+        System.out.println("\nINICIANDO PROGRAMA ...");
+        Grafo grafo = new GrafoDenso();
+        grafo.adicionarVertice("A");
+        grafo.adicionarVertice("B");
+        grafo.adicionarVertice("C");
+        grafo.adicionarVertice("D");
+        grafo.adicionarVertice("E");
 
-        GrafoDenso v = new GrafoDenso();
-        v.adicionarVertice("A");
-        v.adicionarVertice("B");
-        v.adicionarVertice("C");
-        v.adicionarVertice("D");
-        v.adicionarVertice("E");
-        System.out.println("============--------------+++++++++--------------==============");
-        v.adicionarAresta("A", "B");
-        v.adicionarAresta("A", "C");
-        v.adicionarAresta("C", "D");
-        v.adicionarAresta("C", "E");
-        v.adicionarAresta("B", "D");
-        v.imprimir();
-        System.out.println("============--------------+++++++++--------------==============");
-        v.numeroVertice();
-        v.numeroAresta();
-        v.removerAresta("A", "C");
-        v.sequenciaGraus();
-        v.imprimir();
+        grafo.adicionarAresta("A", "B");
+        grafo.adicionarAresta("A", "C");
+        grafo.adicionarAresta("C", "D");
+        grafo.adicionarAresta("C", "E");
+        grafo.adicionarAresta("B", "D");
 
+        grafo.imprimir();
+        grafo.numeroVertice();
+        grafo.numeroAresta();
+        grafo.sequenciaGraus();
+
+        grafo.removerAresta("A", "C");
+
+
+        grafo.imprimir();
+        grafo.numeroVertice();
+        grafo.numeroAresta();
+        grafo.sequenciaGraus();
+
+        System.out.println("\n============--------------+++++++++--------------==============");
+        System.out.println("\nFIM DO PROGRAMA ....");
     }
 
-    static class GrafoDenso implements Grafo{
-        List<String> vertices = new ArrayList<>();
-        List<String> arestas = new ArrayList<>();
+    public record Aresta(String v1, String v2) {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Aresta aresta = (Aresta) o;
+            // A aresta (A, B) é igual a (B, A)
+            return (Objects.equals(v1, aresta.v1) && Objects.equals(v2, aresta.v2)) ||
+                    (Objects.equals(v1, aresta.v2) && Objects.equals(v2, aresta.v1));
+        }
 
         @Override
-        public void adicionarVertice(String vertice){
+        public int hashCode() {
+            return Objects.hash(v1) + Objects.hash(v2);
+        }
+    }
+
+    static class GrafoDenso implements Grafo {
+
+        private final Set<String> vertices = new LinkedHashSet<>();
+
+        private final Set<Aresta> arestas = new HashSet<>();
+
+        @Override
+        public void adicionarVertice(String vertice) {
             vertices.add(vertice);
         }
 
         @Override
         public void sequenciaGraus() {
-            Map<String, Integer> graus = new HashMap<>();
+            if (vertices.isEmpty()) {
+                System.out.println("Sequência de graus: [ ]");
+                return;
+            }
 
-            // Inicializa todos os vértices com grau 0
+
+            Map<String, Integer> graus = new LinkedHashMap<>();
             for (String vertice : vertices) {
                 graus.put(vertice, 0);
             }
 
-            // Conta as arestas para cada vértice
-            for (String aresta : arestas) {
-                String v1 = aresta.substring(0, 1);
-                String v2 = aresta.substring(1);
-                graus.put(v1, graus.get(v1) + 1);
-                graus.put(v2, graus.get(v2) + 1);
+
+            for (Aresta aresta : arestas) {
+                graus.put(aresta.v1(), graus.get(aresta.v1()) + 1);
+                graus.put(aresta.v2(), graus.get(aresta.v2()) + 1);
             }
 
-            // Obtém os graus em uma lista e ordena em ordem decrescente
-            List<Integer> sequencia = new ArrayList<>(graus.values());
-            Collections.sort(sequencia, Collections.reverseOrder());
 
-            System.out.println("Sequência de graus: " + sequencia);
+            String sequencia = graus.values().stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(", "));
+
+            System.out.println("Sequência de graus: [ " + sequencia + " ]");
         }
 
         @Override
-        public void adicionarAresta(String vertice1, String vertice2){
-            String aresta = vertice1 + vertice2;
-            arestas.add(aresta);
+        public void adicionarAresta(String vertice1, String vertice2) {
+
+            if (vertices.contains(vertice1) && vertices.contains(vertice2)) {
+                arestas.add(new Aresta(vertice1, vertice2));
+            } else {
+                System.out.println("Erro: Um ou ambos os vértices não existem no grafo.");
+            }
         }
 
         @Override
         public void removerAresta(String vertice1, String vertice2) {
-            if(arestas.isEmpty()){
-                System.out.println("Não existe aresta.");
+            if (arestas.isEmpty()) {
+                System.out.println("Não há arestas para remover.");
+                return;
             }
-            String aresta = vertice1 + vertice2;
-            if(arestas.contains(aresta)){
-                arestas.remove(aresta);
-                System.out.println("Aresta " + aresta + " removida.");
-            }else{
-                System.out.println("Aresta " + aresta + " não existe.");
+            Aresta arestaParaRemover = new Aresta(vertice1, vertice2);
+            if (arestas.remove(arestaParaRemover)) {
+                System.out.println("Aresta (" + vertice1 + ", " + vertice2 + ") removida.");
+            } else {
+                System.out.println("Aresta (" + vertice1 + ", " + vertice2 + ") não existe.");
             }
         }
 
@@ -88,37 +123,31 @@ public class Main
             for (String vertice : vertices) {
                 System.out.print(vertice + "  ");
             }
-            System.out.println();
-            System.out.println("-----------------");
+            System.out.println("\n---------------------");
+
             for (String verticeLinha : vertices) {
                 System.out.print(verticeLinha + " | ");
-
-                // Para cada vértice na coluna
                 for (String verticeColuna : vertices) {
-                    // Verifica se existe aresta entre verticeLinha e verticeColuna
-                    String aresta1 = verticeLinha + verticeColuna;
-                    String aresta2 = verticeColuna + verticeLinha; // Para grafos não direcionados
-                    int valor = (arestas.contains(aresta1) || arestas.contains(aresta2)) ? 1 : 0;
-                    System.out.print(valor + "  ");
+                    Aresta aresta = new Aresta(verticeLinha, verticeColuna);
+                    System.out.print((arestas.contains(aresta) ? 1 : 0) + "  ");
                 }
                 System.out.println();
             }
-            System.out.println();
             System.out.println("\n============--------------+++++++++--------------==============\n");
         }
 
         @Override
-        public void numeroAresta(){
+        public void numeroAresta() {
             System.out.println("Número de Arestas: " + arestas.size());
         }
 
         @Override
-        public void numeroVertice(){
-            System.out.println("Número de Vertices: " + vertices.size());
+        public void numeroVertice() {
+            System.out.println("Número de Vértices: " + vertices.size());
         }
     }
 
-    interface Grafo{
+    interface Grafo {
         void imprimir();
         void numeroAresta();
         void numeroVertice();
