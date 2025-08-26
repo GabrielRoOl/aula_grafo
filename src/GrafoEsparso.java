@@ -69,7 +69,7 @@ public class GrafoEsparso implements Grafo {
     }
 
     @Override
-    public Set<Aresta> getArestes() {
+    public Set<Aresta> getArestas() {
         Set<Aresta> arestas = new HashSet<>();
         for (String verticeOrigem : adjacencias.keySet()) {
             for (String verticeDestino : adjacencias.get(verticeOrigem)) {
@@ -93,19 +93,19 @@ public class GrafoEsparso implements Grafo {
     public boolean isSubGrafo(Grafo outroGrafo) {
         // G' (this) é um subgrafo de G (outroGrafo) se V' ⊆ V e E' ⊆ E.
         Set<String> verticesOutro = outroGrafo.getVertices();
-        Set<Aresta> arestasOutro = outroGrafo.getArestes();
+        Set<Aresta> arestasOutro = outroGrafo.getArestas();
 
-        return verticesOutro.containsAll(this.getVertices()) && arestasOutro.containsAll(this.getArestes());
+        return verticesOutro.containsAll(this.getVertices()) && arestasOutro.containsAll(this.getArestas());
     }
 
     @Override
     public boolean isSubGrafoGerador(Grafo outroGrafo) {
         // G' (this) é um subgrafo gerador de G (outroGrafo) se V' = V e E' ⊆ E.
         Set<String> verticesOutro = outroGrafo.getVertices();
-        Set<Aresta> arestasOutro = outroGrafo.getArestes();
+        Set<Aresta> arestasOutro = outroGrafo.getArestas();
 
         boolean mesmosVertices = verticesOutro.equals(this.getVertices());
-        boolean arestasContidas = arestasOutro.containsAll(this.getArestes());
+        boolean arestasContidas = arestasOutro.containsAll(this.getArestas());
 
         return mesmosVertices && arestasContidas;
     }
@@ -124,13 +124,13 @@ public class GrafoEsparso implements Grafo {
         Set<Aresta> arestasInduzidasEsperadas = new HashSet<>();
         Set<String> nossosVertices = this.getVertices();
 
-        for (Aresta arestaDoGrafoMaior : outroGrafo.getArestes()) {
+        for (Aresta arestaDoGrafoMaior : outroGrafo.getArestas()) {
             if (nossosVertices.contains(arestaDoGrafoMaior.v1()) && nossosVertices.contains(arestaDoGrafoMaior.v2())) {
                 arestasInduzidasEsperadas.add(arestaDoGrafoMaior);
             }
         }
 
         // Passo 3: Compara o conjunto de arestas real com o esperado.
-        return this.getArestes().equals(arestasInduzidasEsperadas);
+        return this.getArestas().equals(arestasInduzidasEsperadas);
     }
 }

@@ -95,7 +95,7 @@ public class GrafoDenso implements Grafo {
     }
 
     @Override
-    public Set<Aresta> getArestes() {
+    public Set<Aresta> getArestas() {
         return new HashSet<>(this.arestas);
     }
 
@@ -111,7 +111,7 @@ public class GrafoDenso implements Grafo {
         // 1. O conjunto de vértices de G' é um subconjunto dos vértices de G.
         // 2. O conjunto de arestas de G' é um subconjunto das arestas de G.
         Set<String> verticesOutro = outroGrafo.getVertices();
-        Set<Aresta> arestasOutro = outroGrafo.getArestes();
+        Set<Aresta> arestasOutro = outroGrafo.getArestas();
 
         return verticesOutro.containsAll(this.vertices) && arestasOutro.containsAll(this.arestas);
     }
@@ -122,7 +122,7 @@ public class GrafoDenso implements Grafo {
         // 1. G' é um subgrafo de G.
         // 2. O conjunto de vértices de G' é IGUAL ao de G.
         Set<String> verticesOutro = outroGrafo.getVertices();
-        Set<Aresta> arestasOutro = outroGrafo.getArestes();
+        Set<Aresta> arestasOutro = outroGrafo.getArestas();
 
         boolean mesmosVertices = verticesOutro.equals(this.vertices);
         boolean arestasContidas = arestasOutro.containsAll(this.arestas);
@@ -143,7 +143,7 @@ public class GrafoDenso implements Grafo {
 
         // Passo 2: Monta o conjunto de arestas que DEVERIAM existir em 'this' para ser induzido.
         Set<Aresta> arestasInduzidasEsperadas = new HashSet<>();
-        for (Aresta arestaDoGrafoMaior : outroGrafo.getArestes()) {
+        for (Aresta arestaDoGrafoMaior : outroGrafo.getArestas()) {
             // Se ambos os vértices da aresta do grafo maior pertencem ao nosso conjunto
             // de vértices, então essa aresta deve estar no nosso subgrafo.
             if (this.vertices.contains(arestaDoGrafoMaior.v1()) && this.vertices.contains(arestaDoGrafoMaior.v2())) {

@@ -10,7 +10,7 @@ interface Grafo {
     void adicionarAresta(String vertice1, String vertice2);
     void removerAresta(String vertice1, String vertice2);
 
-    Set<Aresta> getArestes();
+    Set<Aresta> getArestas();
 
 
     Set<String> getVertices();

@@ -1,6 +1,3 @@
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -22,7 +19,7 @@ public class Main {
 
 
         // Visualizando o getArestas
-        System.out.println(grafo.getArestes());
+        System.out.println(grafo.getArestas());
 
         // Visualizando o getVestices
         System.out.println(grafo.getVertices());
@@ -57,7 +54,7 @@ public class Main {
         grafoEsparso.adicionarAresta("B", "D");
 
         // Visualizando o getArestas
-        System.out.println(grafoEsparso.getArestes());
+        System.out.println(grafoEsparso.getArestas());
 
         // Visualizando o getVestices
         System.out.println(grafoEsparso.getVertices());
