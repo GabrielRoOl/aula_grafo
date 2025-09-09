@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.Set;
 
 interface Grafo {
@@ -12,13 +13,13 @@ interface Grafo {
 
     Set<Aresta> getArestas();
 
-
     Set<String> getVertices();
 
     boolean isSubGrafo(Grafo grafo);
 
-
     boolean isSubGrafoGerador(Grafo grafo);
 
     boolean isSubGrafoInduzido(Grafo grafo);
+
+    Map<String, Integer> colorirGrafo();
 }

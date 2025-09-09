@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 public class GrafoEsparso implements Grafo {
 
     private final Map<String, List<String>> adjacencias = new LinkedHashMap<>();
+    
 
     @Override
     public void adicionarVertice(String vertice) {
@@ -132,5 +133,40 @@ public class GrafoEsparso implements Grafo {
 
         // Passo 3: Compara o conjunto de arestas real com o esperado.
         return this.getArestas().equals(arestasInduzidasEsperadas);
+    }
+
+    @Override
+    public Map<String, Integer> colorirGrafo() {
+        // Mapa para guardar o resultado: Vértice -> Cor (Integer)
+        Map<String, Integer> cores = new LinkedHashMap<>();
+
+        // Itera sobre cada vértice do grafo para atribuir uma cor
+        for (String vertice : this.getVertices()) {
+            // Conjunto para armazenar as cores dos vizinhos já coloridos
+            Set<Integer> coresVizinhas = new HashSet<>();
+            
+            // Pega a lista de vizinhos do vértice atual
+            List<String> vizinhos = adjacencias.get(vertice);
+            if (vizinhos != null) {
+                // Para cada vizinho, verifica se ele já foi colorido. Se sim, adiciona sua cor ao conjunto.
+                for (String vizinho : vizinhos) {
+                    if (cores.containsKey(vizinho)) {
+                        coresVizinhas.add(cores.get(vizinho));
+                    }
+                }
+            }
+
+            // Encontra a menor cor (horário) disponível.
+            // Começa com a cor 1 e incrementa até encontrar uma que não esteja em uso pelos vizinhos.
+            int cor = 1;
+            while (coresVizinhas.contains(cor)) {
+                cor++;
+            }
+
+            // Atribui a menor cor encontrada ao vértice atual
+            cores.put(vertice, cor);
+        }
+
+        return cores;
     }
 }

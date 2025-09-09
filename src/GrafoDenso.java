@@ -154,5 +154,10 @@ public class GrafoDenso implements Grafo {
         // Passo 3: Compara o conjunto de arestas de 'this' com o conjunto esperado.
         return this.arestas.equals(arestasInduzidasEsperadas);
     }
+
+    @Override
+    public Map<String, Integer> colorirGrafo() {
+        throw new UnsupportedOperationException("Unimplemented method 'colorirGrafo'");
+    }
 }
 

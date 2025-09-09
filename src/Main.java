@@ -1,73 +1,50 @@
+import java.util.Collections;
+import java.util.Map;
+
 public class Main {
 
     public static void main(String[] args) {
 
         System.out.println("\n============--------------+++++++++--------------==============");
-        Grafo grafo = new GrafoDenso();
-        grafo.adicionarVertice("A");
-        grafo.adicionarVertice("B");
-        grafo.adicionarVertice("C");
-        grafo.adicionarVertice("D");
-        grafo.adicionarVertice("E");
-
-        grafo.adicionarAresta("A", "B");
-        grafo.adicionarAresta("A", "C");
-        grafo.adicionarAresta("C", "D");
-        grafo.adicionarAresta("C", "E");
-        grafo.adicionarAresta("C", "B");
-        grafo.adicionarAresta("B", "D");
 
 
-        // Visualizando o getArestas
-        System.out.println(grafo.getArestas());
+        Grafo grafoEsparso = new GrafoEsparso();
+        String[] aulas = {"M", "A", "C", "F", "Q", "P"};
+        for (String aula : aulas) {
+            grafoEsparso.adicionarVertice(aula);
+        }
 
-        // Visualizando o getVestices
-        System.out.println(grafo.getVertices());
-
-        // Visualiza se existe um subgrafo do gerador
-        System.out.println(grafo.isSubGrafoGerador(grafo));
-
-        // Visualiza se existe um subgrafo
-        System.out.println(grafo.isSubGrafo(grafo));
-
-        // Visualiza se existe um subgrafo induzido
-        System.out.println(grafo.isSubGrafoInduzido(grafo));
-
-
+        grafoEsparso.adicionarAresta("C", "F");
+        grafoEsparso.adicionarAresta("C", "A");
+        grafoEsparso.adicionarAresta("F", "A");
+        grafoEsparso.adicionarAresta("M", "P");
+        grafoEsparso.adicionarAresta("M", "A");
+        grafoEsparso.adicionarAresta("P", "A");
+        grafoEsparso.adicionarAresta("Q", "F");
+        grafoEsparso.adicionarAresta("Q", "A");
+        grafoEsparso.adicionarAresta("C", "P");
+        grafoEsparso.adicionarAresta("M", "Q");
+        
+        grafoEsparso.imprimir();
 
         System.out.println("\n============--------------+++++++++--------------==============");
 
 
-        Grafo grafoEsparso = new GrafoEsparso();
-        grafoEsparso.adicionarVertice("A");
-        grafoEsparso.adicionarVertice("B");
-        grafoEsparso.adicionarVertice("C");
-        grafoEsparso.adicionarVertice("D");
-        grafoEsparso.adicionarVertice("E");
+        Map<String, Integer> coresAtribuidas = grafoEsparso.colorirGrafo();
+        
+        // Calcula o número cromático (número mínimo de cores/horários)
+        int numeroMinimoHorarios = 0;
+        if (!coresAtribuidas.isEmpty()) {
+            numeroMinimoHorarios = Collections.max(coresAtribuidas.values());
+        }
 
-
-        grafoEsparso.adicionarAresta("A", "B");
-        grafoEsparso.adicionarAresta("A", "C");
-        grafoEsparso.adicionarAresta("A", "C");
-        grafoEsparso.adicionarAresta("C", "D");
-        grafoEsparso.adicionarAresta("C", "E");
-        grafoEsparso.adicionarAresta("B", "D");
-
-        // Visualizando o getArestas
-        System.out.println(grafoEsparso.getArestas());
-
-        // Visualizando o getVestices
-        System.out.println(grafoEsparso.getVertices());
-
-        // Visualiza se existe um subgrafo do gerador
-        System.out.println(grafoEsparso.isSubGrafoGerador(grafo));
-
-        // Visualiza se existe um subgrafo
-        System.out.println(grafoEsparso.isSubGrafo(grafo));
-
-        // Visualiza se existe um subgrafo induzido
-        System.out.println(grafoEsparso.isSubGrafoInduzido(grafo));
-
+        System.out.println("Número mínimo de horários necessários (Número Cromático): " + numeroMinimoHorarios);
+        System.out.println("Distribuição das aulas por horário:");
+        
+        // Imprime o resultado formatado
+        for (Map.Entry<String, Integer> entry : coresAtribuidas.entrySet()) {
+            System.out.println(" - Aula " + entry.getKey() + " -> Horário " + entry.getValue());
+        }
 
     }
 }
